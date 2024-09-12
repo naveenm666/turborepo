@@ -1,5 +1,5 @@
 {
-  "name": "Summarization",
+  "name": "summarization",
   "private": true,
   "scripts": {
     "build": "turbo build",
