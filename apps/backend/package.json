@@ -5,13 +5,20 @@
   "license": "MIT",
   "dependencies": {
     "@types/express": "^4.17.21",
+    "@types/node": "^22.5.4",
+    "ai": "^3.3.35",
+    "axios": "^1.7.7",
     "express": "^4.21.0",
+    "ollama-ai-provider": "^0.14.0",
+    "pdf-lib": "^1.17.1",
+    "pdf-parse": "^1.1.1",
     "pg": "^8.12.0",
     "pgvector": "^0.2.0",
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "zod": "^3.23.8"
   },
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register src/index.ts",
