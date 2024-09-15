@@ -25,3 +25,18 @@ body {
     text-wrap: balance;
   }
 }
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+    color: green; /* Green color at the start and end of the animation */
+  }
+  50% {
+    opacity: 0.5;
+  color: transparent; /* Transparent color in the middle of the animation */
+  }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
