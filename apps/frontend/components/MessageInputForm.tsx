@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface MessageInputFormProps {
   input: string;
@@ -7,6 +7,7 @@ interface MessageInputFormProps {
   startListening: () => void;
   stopListening: () => void;
   onSubmit: (e: React.FormEvent) => void;
+  onFileUpload: (file: File) => void;
 }
 
 const MessageInputForm: React.FC<MessageInputFormProps> = ({
@@ -15,13 +16,30 @@ const MessageInputForm: React.FC<MessageInputFormProps> = ({
   isListening,
   startListening,
   stopListening,
-  onSubmit
+  onSubmit,
+  onFileUpload
 }) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onFileUpload(file);
+    }
+  };
+
   return (
     <form
       onSubmit={onSubmit}
       className="bg-gray-100 border-t border-gray-300 p-2 flex items-center"
     >
+      <label className="flex items-center cursor-pointer mr-2">
+        <input
+          type="file"
+          accept=".pdf, .doc, .docx, .txt"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+        <span className="px-4 py-2 bg-gray-500 text-white rounded-md">Upload File</span>
+      </label>
       <input
         className="flex-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         value={input}

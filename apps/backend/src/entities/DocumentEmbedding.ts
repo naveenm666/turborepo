@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class FileEmbedding {
+export class pdfEmbedding {
   @PrimaryGeneratedColumn()
   id: number;
 

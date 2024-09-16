@@ -7,6 +7,7 @@ import MessageList from '@/components/MessageList';
 import MessageInputForm from '@/components/MessageInputForm';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function Chat() {
   const { data: session, status } = useSession();
@@ -89,6 +90,30 @@ export default function Chat() {
     }
   };
 
+  const handleFileUpload = async (file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await axios.post('http://localhost:3001/api/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      setMessages([
+        ...messages,
+        { content: `File ${file.name} uploaded and processed successfully`, role: 'system' },
+      ]);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setMessages([
+        ...messages,
+        { content: `Error uploading file ${file.name}`, role: 'system' },
+      ]);
+    }
+  };
+
   const userName = session?.user?.name;
   const userProfileImage = session?.user?.image || 'https://example.com/default-profile.png';
   const lastName = userName?.split(' ').slice(-1).join(' ') || 'User'; // Extract last name
@@ -118,6 +143,7 @@ export default function Chat() {
             startListening={startListening}
             stopListening={stopListening}
             onSubmit={handleSubmit}
+            onFileUpload={handleFileUpload}
           />
         </>
       ) : (
