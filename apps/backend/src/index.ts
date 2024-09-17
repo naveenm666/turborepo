@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import uploadRouter from './routes/upload';
+import queryRouter from './routes/query';
 import { DataSource } from 'typeorm';
 import { pdfEmbedding } from './entities/DocumentEmbedding';
 
@@ -26,6 +27,8 @@ dataSource
     app.listen(3001, () => {
       console.log('Server running on port 3001');
       app.use('/api', uploadRouter);
+      app.use('/api', queryRouter);
+
     });
   })
   .catch((error) => {

@@ -6,15 +6,12 @@ import { readStreamableValue } from 'ai/rsc';
 import MessageList from '@/components/MessageList';
 import MessageInputForm from '@/components/MessageInputForm';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 export default function Chat() {
   const { data: session, status } = useSession();
-  const router = useRouter();
   const [messages, setMessages] = useState<CoreMessage[]>([]);
   const [input, setInput] = useState('');
-  const [data, setData] = useState<any>();
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
 
@@ -72,21 +69,24 @@ export default function Chat() {
     setInput('');
 
     try {
-      const result = await continueConversation(newMessages);
-      setData(result.data);
+      const response = await axios.post('http://localhost:3001/api/query', { query: input });
+      setMessages([
+        ...newMessages,
+        { role: 'assistant', content: response.data.answer },
+      ]);
 
-      for await (const content of readStreamableValue(result.message)) {
-        setMessages([
-          ...newMessages,
-          {
-            role: 'assistant',
-            content: content as string,
-          },
-        ]);
-      }
+      // if (response.data.matches.length > 0) {
+      //   setMessages([
+      //     ...newMessages,
+      //     { role: 'assistant', content: `Found ${response.data.answer} matching documents.` },
+      //   ]);
+      // }
     } catch (error) {
       console.error('Error during conversation:', error);
-      // Handle error appropriately (e.g., show a message to the user)
+      setMessages([
+        ...newMessages,
+        { role: 'assistant', content: 'Error processing your query. Please try again later.' },
+      ]);
     }
   };
 
@@ -95,7 +95,7 @@ export default function Chat() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await axios.post('http://localhost:3001/api/upload', formData, {
+      await axios.post('http://localhost:3001/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
