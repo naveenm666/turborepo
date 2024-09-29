@@ -28,9 +28,9 @@ async function loadDocument(filePath: string) {
     case '.docx':
       loader = new DocxLoader(filePath);
       break;
-    case '.txt':
-      loader = new TextLoader(filePath);
-      break;
+    // case '.txt':
+    //   loader = new TextLoader(filePath);
+    //   break;
     default:
       throw new Error(`Unsupported file type: ${extension}`);
   }
